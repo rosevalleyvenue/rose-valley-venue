@@ -1,1 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rose Valley Outdoor Venue — Humble, Texas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;500&family=Raleway:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#8B6914;
+      --charcoal:#181412;--dark:#0d0b0a;--mid:#1e1a17;
+      --warm-white:#F7F2E8;--text-muted:#9A8A70;--text-light:#C8B898;
+      --R2:https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Raleway',sans-serif;background:var(--dark);color:var(--warm-white);overflow-x:hidden;}
 
+    /* LOADER */
+    #loader{position:fixed;inset:0;background:var(--dark);z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;transition:opacity .8s ease,visibility .8s ease;}
+    #loader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+    .loader-logo{font-family:'Cinzel',serif;font-size:1.4rem;letter-spacing:.3em;color:var(--gold);animation:loaderPulse 1.5s ease infinite;}
+    .loader-bar{width:120px;height:1px;background:rgba(201,168,76,.2);}
+    .loader-fill{height:100%;background:var(--gold);animation:loaderFill 2s ease forwards;}
+    @keyframes loaderPulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+    @keyframes loaderFill{from{width:0;}to{width:100%;}}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.8rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:all .5s ease;}
+    nav.scrolled{background:rgba(13,11,10,.97);padding:1rem 3rem;border-bottom:1px solid rgba(201,168,76,.1);backdrop-filter:blur(20px);}
+    .nav-logo{font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.2em;color:var(--gold-light);text-decoration:none;}
+    .nav-links{display:flex;gap:2.5rem;list-style:none;}
+    .nav-links a{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(247,242,232,.7);text-decoration:none;transition:color .3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s ease;}
+    .nav-links a:hover{color:var(--gold-light);}
+    .nav-links a:hover::after{width:100%;}
+    .nav-cta{font-size:.6rem!important;color:var(--charcoal)!important;background:var(--gold);padding:.65rem 1.6rem;transition:background .3s!important;}
+    .nav-cta:hover{background:var(--gold-light)!important;}
+    .nav-cta::after{display:none!important;}
+    .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px;cursor:pointer;}
+    .hamburger span{display:block;width:24px;height:1px;background:var(--warm-white);}
+    .mobile-menu{display:none;position:fixed;inset:0;background:rgba(13,11,10,.99);z-index:99;flex-direction:column;justify-content:center;align-items:center;gap:2.5rem;}
+    .mobile-menu.open{display:flex;}
+    .mobile-menu a{font-family:'Cinzel',serif;font-size:1.8rem;color:var(--warm-white);text-decoration:none;transition:color .3s;}
+    .mobile-menu a:hover{color:var(--gold-light);}
+    .close-menu{position:absolute;top:1.5rem;right:2rem;background:none;border:none;color:var(--warm-white);font-size:1.8rem;cursor:pointer;}
+
+    /* HERO */
+    #hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+    .hero-slides{position:absolute;inset:0;}
+    .hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.5s ease;}
+    .hero-slide.active{opacity:1;animation:kenBurns 8s ease forwards;}
+    @keyframes kenBurns{from{transform:scale(1.05);}to{transform:scale(1.0);}}
+    .s1{background-image:url('https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0728.jpeg');}
+    .s2{background-image:url('https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0758.jpeg');}
+    .s3{background-image:url('https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0764.jpeg');}
+    .s4{background-image:url('https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0762.jpeg');}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.65) 0%,rgba(0,0,0,.3) 50%,rgba(0,0,0,.6) 100%);}
+    .hero-content{position:relative;text-align:center;padding:2rem;max-width:900px;}
+    .hero-eyebrow{font-size:.6rem;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;opacity:0;animation:revealUp 1s .5s ease forwards;}
+    .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,9vw,7.5rem);font-weight:300;line-height:.95;color:var(--warm-white);margin-bottom:.5rem;opacity:0;animation:revealUp 1s .8s ease forwards;}
+    .hero-title em{font-style:italic;color:var(--gold-light);}
+    .hero-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3vw,2.5rem);font-weight:300;font-style:italic;color:rgba(247,242,232,.6);margin-bottom:2rem;opacity:0;animation:revealUp 1s 1s ease forwards;}
+    .hero-divider{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:2.5rem;opacity:0;animation:revealUp 1s 1.2s ease forwards;}
+    .hdl{width:60px;height:1px;background:var(--gold);}
+    .hdi{color:var(--gold);font-size:.65rem;letter-spacing:.3em;}
+    .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:revealUp 1s 1.4s ease forwards;}
+    .hero-dots{position:absolute;bottom:5rem;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;z-index:10;}
+    .hdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);border:none;cursor:pointer;transition:all .3s;padding:0;}
+    .hdot.active{background:var(--gold);width:20px;border-radius:3px;}
+    .scroll-cue{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0;animation:revealUp 1s 2s ease forwards;}
+    .scroll-cue span{font-size:.5rem;letter-spacing:.4em;text-transform:uppercase;color:var(--text-muted);}
+    .scl{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scLine 2s ease infinite;}
+    @keyframes scLine{0%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}51%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+    @keyframes revealUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+    /* BUTTONS */
+    .btn-gold{display:inline-block;padding:.9rem 2.8rem;background:var(--gold);color:var(--charcoal);font-family:'Raleway',sans-serif;font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;text-decoration:none;font-weight:400;transition:all .3s;position:relative;overflow:hidden;}
+    .btn-gold::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:left .5s ease;}
+    .btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 10px 30px rgba(201,168,76,.3);}
+    .btn-gold:hover::before{left:100%;}
+    .btn-outline{display:inline-block;padding:.9rem 2.8rem;border:1px solid rgba(255,255,255,.3);color:var(--warm-white);font-family:'Raleway',sans-serif;font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;text-decoration:none;transition:all .3s;}
+    .btn-outline:hover{border-color:var(--gold);color:var(--gold-light);transform:translateY(-2px);}
+
+    /* TICKER */
+    #ticker{overflow:hidden;background:var(--charcoal);border-top:1px solid rgba(201,168,76,.1);border-bottom:1px solid rgba(201,168,76,.1);}
+    .ticker-track{display:flex;gap:6px;animation:tickerScroll 45s linear infinite;width:max-content;}
+    .ticker-track:hover{animation-play-state:paused;}
+    .ticker-img{width:280px;height:180px;object-fit:cover;flex-shrink:0;filter:brightness(.75) saturate(.9);transition:all .4s;}
+    .ticker-img:hover{filter:brightness(1) saturate(1.1);transform:scale(1.02);}
+    @keyframes tickerScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+    /* STATS */
+    #stats{padding:4rem 0;background:var(--gold);}
+    .stats-inner{max-width:900px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:2rem;}
+    .stat-item{text-align:center;}
+    .stat-number{font-family:'Cinzel',serif;font-size:2.5rem;color:var(--charcoal);display:block;line-height:1;margin-bottom:.3rem;}
+    .stat-label{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(24,20,18,.65);}
+    .stat-div{width:1px;height:40px;background:rgba(0,0,0,.15);}
+
+    /* SECTIONS */
+    section{padding:8rem 0;}
+    .container{max-width:1200px;margin:0 auto;padding:0 2rem;}
+    .section-tag{font-size:.58rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block;}
+    .section-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:300;line-height:1.05;color:var(--warm-white);margin-bottom:1.5rem;}
+    .section-heading em{font-style:italic;color:var(--gold-light);}
+    .gold-rule{width:50px;height:1px;background:var(--gold);margin-bottom:2rem;}
+
+    /* ABOUT */
+    #about{background:var(--mid);}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;}
+    .photo-stack{position:relative;height:600px;}
+    .ps-main{position:absolute;top:0;left:0;width:78%;height:78%;object-fit:cover;}
+    .ps-accent{position:absolute;bottom:0;right:0;width:55%;height:52%;object-fit:cover;border:5px solid var(--mid);}
+    .ps-badge{position:absolute;bottom:6rem;left:-2rem;background:var(--gold);padding:1.5rem 2rem;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:badgeFloat 4s ease infinite;}
+    @keyframes badgeFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+    .ps-badge-n{font-family:'Cinzel',serif;font-size:2rem;color:var(--charcoal);display:block;line-height:1;}
+    .ps-badge-l{font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(24,20,18,.7);}
+    .about-text p{font-size:.88rem;line-height:2;color:var(--text-light);margin-bottom:1.5rem;font-weight:300;}
+    .amenity-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:2rem;}
+    .amenity{display:flex;align-items:center;gap:.7rem;font-size:.68rem;color:var(--text-light);padding:.5rem 0;border-bottom:1px solid rgba(201,168,76,.08);}
+    .amenity-dot{width:4px;height:4px;background:var(--gold);flex-shrink:0;}
+
+    /* EVENTS SHOWCASE */
+    #events-showcase{background:var(--dark);}
+    .showcase-header{text-align:center;margin-bottom:5rem;}
+    .showcase-header .gold-rule{margin:0 auto 2rem;}
+    .showcase-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:300px 300px;gap:8px;}
+    .sc-item{position:relative;overflow:hidden;cursor:pointer;}
+    .sc-item.big{grid-row:1/3;}
+    .sc-item img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.25,.46,.45,.94);filter:brightness(.85);}
+    .sc-item:hover img{transform:scale(1.06);filter:brightness(1);}
+    .sc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75),transparent 50%);opacity:0;transition:opacity .4s;display:flex;align-items:flex-end;padding:1.5rem;}
+    .sc-item:hover .sc-overlay{opacity:1;}
+    .sc-label{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-light);}
+
+    /* PACKAGES */
+    #packages{background:var(--mid);}
+    .pkg-header{text-align:center;margin-bottom:5rem;}
+    .pkg-header .gold-rule{margin:0 auto 2rem;}
+    .pkg-card{border:1px solid rgba(201,168,76,.15);background:linear-gradient(135deg,rgba(255,255,255,.02),rgba(255,255,255,.005));padding:3.5rem;position:relative;overflow:hidden;transition:all .5s;}
+    .pkg-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--gold);}
+    .pkg-card:hover{border-color:rgba(201,168,76,.4);transform:translateY(-6px);box-shadow:0 30px 80px rgba(0,0,0,.5);}
+    .tour-banner{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.25);border-left:3px solid var(--gold);padding:1rem 1.5rem;margin-bottom:2.5rem;font-size:.72rem;color:var(--gold-light);line-height:1.7;}
+    .pkg-name{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--gold-light);margin-bottom:.4rem;}
+    .pkg-tagline{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2.5rem;}
+    .pricing-row{display:flex;margin-bottom:2.5rem;border:1px solid rgba(201,168,76,.12);}
+    .price-cell{flex:1;padding:1.5rem;text-align:center;border-right:1px solid rgba(201,168,76,.12);transition:background .3s;}
+    .price-cell:last-child{border-right:none;}
+    .price-cell:hover{background:rgba(201,168,76,.06);}
+    .price-day{font-size:.52rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.4rem;}
+    .price-amt{font-family:'Cinzel',serif;font-size:1.8rem;color:var(--warm-white);display:block;line-height:1;}
+    .price-hrs{font-size:.58rem;color:var(--text-muted);display:block;margin-top:.3rem;}
+    .incl-label{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block;}
+    .incl-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:2.5rem;}
+    .incl-item{display:flex;align-items:flex-start;gap:.8rem;font-size:.7rem;color:var(--text-light);font-weight:300;padding:.4rem 0;line-height:1.5;}
+    .incl-item::before{content:'✦';color:var(--gold);flex-shrink:0;font-size:.55rem;margin-top:.2rem;}
+    .addons-wrap{border-top:1px solid rgba(201,168,76,.1);padding-top:2rem;margin-bottom:2.5rem;}
+    .addons-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+    .addon-row{display:flex;justify-content:space-between;align-items:center;font-size:.68rem;color:var(--text-light);font-weight:300;padding:.75rem 1rem;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.08);}
+    .addon-price{color:var(--gold-light);font-family:'Cinzel',serif;font-size:.75rem;}
+    .pay-box{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);padding:1.2rem 1.5rem;margin-bottom:2.5rem;font-size:.7rem;color:var(--text-light);line-height:1.8;font-weight:300;}
+
+    /* GALLERY — DESKTOP */
+    #gallery{background:var(--dark);}
+    .gal-header{text-align:center;margin-bottom:3rem;}
+    .gal-header .gold-rule{margin:0 auto 2rem;}
+    .gal-tabs{display:flex;justify-content:center;gap:.4rem;flex-wrap:wrap;margin-bottom:3rem;}
+    .g-tab{padding:.5rem 1.3rem;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;background:none;border:1px solid rgba(255,255,255,.1);color:var(--text-muted);cursor:pointer;transition:all .3s;font-family:'Raleway',sans-serif;}
+    .g-tab.active,.g-tab:hover{border-color:var(--gold);color:var(--gold-light);background:rgba(201,168,76,.06);}
+    .gal-masonry{columns:3;column-gap:8px;}
+    .g-item{break-inside:avoid;margin-bottom:8px;position:relative;overflow:hidden;cursor:pointer;display:block;}
+    .g-item img{width:100%;display:block;transition:transform .7s cubic-bezier(.25,.46,.45,.94);filter:brightness(.85) saturate(.95);}
+    .g-item:hover img{transform:scale(1.05);filter:brightness(1) saturate(1.05);}
+    .g-mask{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent 50%);opacity:0;transition:opacity .4s;display:flex;align-items:flex-end;padding:1rem;}
+    .g-item:hover .g-mask{opacity:1;}
+    .g-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-light);}
+
+    /* GALLERY — MOBILE CAROUSEL */
+    .gal-carousel{display:none;position:relative;overflow:hidden;}
+    .carousel-track{display:flex;transition:transform .4s ease;will-change:transform;}
+    .carousel-slide{min-width:100%;padding:0 .5rem;}
+    .carousel-collage{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:150px 150px;gap:4px;}
+    .carousel-collage .col-item{position:relative;overflow:hidden;cursor:pointer;}
+    .carousel-collage .col-item.tall{grid-row:1/3;}
+    .carousel-collage .col-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+    .carousel-collage .col-item:active img{transform:scale(1.04);}
+    .carousel-nav{display:flex;justify-content:center;align-items:center;gap:1rem;margin-top:1.5rem;}
+    .carousel-btn{background:none;border:1px solid rgba(201,168,76,.3);color:var(--gold);width:36px;height:36px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+    .carousel-btn:hover{background:var(--gold);color:var(--charcoal);}
+    .carousel-dots{display:flex;gap:.4rem;}
+    .c-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;padding:0;transition:all .3s;}
+    .c-dot.active{background:var(--gold);width:16px;border-radius:3px;}
+
+    /* LIGHTBOX */
+    #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:2000;justify-content:center;align-items:center;}
+    #lightbox.open{display:flex;}
+    #lbImg{max-width:88vw;max-height:88vh;object-fit:contain;}
+    .lb-close{position:absolute;top:1.5rem;right:2rem;background:none;border:none;color:var(--gold);font-size:2rem;cursor:pointer;transition:transform .3s;}
+    .lb-close:hover{transform:rotate(90deg);}
+
+    /* AVAILABILITY */
+    #availability{background:var(--mid);}
+    .avail-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:6rem;align-items:start;}
+    .legend{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem;}
+    .legend-item{display:flex;align-items:center;gap:.8rem;font-size:.7rem;color:var(--text-light);}
+    .l-dot{width:10px;height:10px;flex-shrink:0;}
+    .l-a{background:#5cb85c;}.l-p{background:var(--gold);}.l-b{background:#d9534f;}
+    .cal-wrap{background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.12);padding:2.5rem;}
+    .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;}
+    .cal-ml{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--warm-white);}
+    .cal-btn{background:none;border:1px solid rgba(201,168,76,.3);color:var(--gold);width:34px;height:34px;cursor:pointer;font-size:1rem;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+    .cal-btn:hover{background:var(--gold);color:var(--charcoal);}
+    .cal-dn-row{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:.5rem;}
+    .cal-dn{font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);text-align:center;padding:.4rem 0;}
+    .cal-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+    .cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--text-muted);}
+    .cal-cell.avail{background:rgba(92,184,92,.12);color:#81c784;cursor:pointer;}
+    .cal-cell.avail:hover{background:rgba(92,184,92,.25);}
+    .cal-cell.pending{background:rgba(201,168,76,.15);color:var(--gold-light);}
+    .cal-cell.booked{background:rgba(217,83,79,.12);color:#ef9a9a;text-decoration:line-through;}
+    .cal-cell.today{outline:1px solid var(--gold);}
+    .cal-note{margin-top:1.5rem;font-size:.65rem;color:var(--text-muted);line-height:1.7;font-weight:300;}
+    .avail-note-box{background:rgba(201,168,76,.08);border-left:3px solid var(--gold);padding:1rem 1.5rem;font-size:.7rem;color:var(--gold-light);line-height:1.7;margin:2rem 0;}
+
+    /* CONTACT */
+    #contact{background:var(--dark);}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:7rem;align-items:start;}
+    .contact-info p{font-size:.85rem;color:var(--text-light);line-height:2;font-weight:300;margin-bottom:2.5rem;}
+    .c-details{display:flex;flex-direction:column;gap:1.5rem;}
+    .cd-item{display:flex;flex-direction:column;gap:.3rem;}
+    .cd-label{font-size:.52rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);}
+    .cd-value{font-size:.85rem;color:var(--warm-white);font-weight:300;line-height:1.6;}
+    .tour-req{margin-top:2rem;padding:1.2rem 1.5rem;border-left:3px solid var(--gold);background:rgba(201,168,76,.06);font-size:.7rem;color:var(--gold-light);line-height:1.8;}
+    .form{display:flex;flex-direction:column;gap:1.2rem;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    .fg{display:flex;flex-direction:column;gap:.4rem;}
+    .fg label{font-size:.56rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);}
+    .fg input,.fg select,.fg textarea{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);color:var(--warm-white);padding:.85rem 1rem;font-family:'Raleway',sans-serif;font-size:.78rem;font-weight:300;outline:none;transition:border-color .3s,background .3s;width:100%;}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);background:rgba(201,168,76,.04);}
+    .fg select option{background:var(--charcoal);}
+    .fg textarea{resize:vertical;min-height:110px;}
+    .form-note{font-size:.63rem;color:var(--text-muted);line-height:1.7;font-weight:300;font-style:italic;}
+    .form-success{display:none;text-align:center;padding:3rem;border:1px solid var(--gold);background:rgba(201,168,76,.06);}
+    .form-success h3{font-family:'Cinzel',serif;font-size:1.6rem;color:var(--gold-light);margin-bottom:1rem;}
+    .form-success p{font-size:.78rem;color:var(--text-light);line-height:1.8;font-weight:300;}
+
+    /* FOOTER */
+    footer{background:var(--dark);border-top:1px solid rgba(201,168,76,.12);padding:4rem 0 2rem;text-align:center;}
+    .footer-logo{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--gold-light);letter-spacing:.15em;margin-bottom:.8rem;}
+    .footer-tagline{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2rem;}
+    .footer-links{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;margin-bottom:2rem;}
+    .footer-links a{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .3s;}
+    .footer-links a:hover{color:var(--gold-light);}
+    .footer-copy{font-size:.58rem;color:rgba(255,255,255,.15);}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    .reveal-l{opacity:0;transform:translateX(-40px);transition:opacity .8s ease,transform .8s ease;}
+    .reveal-l.visible{opacity:1;transform:translateX(0);}
+    .reveal-r{opacity:0;transform:translateX(40px);transition:opacity .8s ease,transform .8s ease;}
+    .reveal-r.visible{opacity:1;transform:translateX(0);}
+    .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      nav{padding:1.2rem 1.5rem;}nav.scrolled{padding:1rem 1.5rem;}
+      .nav-links{display:none;}.hamburger{display:flex;}
+      .about-grid,.avail-grid,.contact-grid{grid-template-columns:1fr;gap:3rem;}
+      .photo-stack{height:350px;}.ps-badge{left:-.5rem;}
+      .showcase-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
+      .sc-item.big{grid-row:auto;}
+      /* HIDE desktop gallery, SHOW carousel */
+      .gal-masonry{display:none;}
+      .gal-carousel{display:block;}
+      .gal-tabs{display:none;}
+      .form-row{grid-template-columns:1fr;}
+      .incl-grid{grid-template-columns:1fr;}
+      .addons-grid{grid-template-columns:1fr;}
+      .pricing-row{flex-direction:column;}
+      .price-cell{border-right:none;border-bottom:1px solid rgba(201,168,76,.12);}
+      .stat-div{display:none;}
+    }
+    @media(max-width:480px){
+      .showcase-grid{grid-template-columns:1fr;}
+      .hero-btns{flex-direction:column;align-items:center;}
+    }
+  </style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-logo">ROSE VALLEY</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">ROSE VALLEY</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#events-showcase">Events</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#availability">Availability</a></li>
+    <li><a href="#contact" class="nav-cta">Request a Tour</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close-menu" onclick="toggleMenu()">✕</button>
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#events-showcase" onclick="toggleMenu()">Events</a>
+  <a href="#packages" onclick="toggleMenu()">Packages</a>
+  <a href="#gallery" onclick="toggleMenu()">Gallery</a>
+  <a href="#availability" onclick="toggleMenu()">Availability</a>
+  <a href="#contact" onclick="toggleMenu()">Request a Tour</a>
+</div>
+
+<section id="hero">
+  <div class="hero-slides">
+    <div class="hero-slide s1 active"></div>
+    <div class="hero-slide s2"></div>
+    <div class="hero-slide s3"></div>
+    <div class="hero-slide s4"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Humble, Texas · Family Owned</span>
+    <h1 class="hero-title">Rose Valley</h1>
+    <p class="hero-sub">Outdoor Venue</p>
+    <div class="hero-divider">
+      <div class="hdl"></div>
+      <span class="hdi">✦ Where Memories Are Made ✦</span>
+      <div class="hdl"></div>
+    </div>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-gold">Request a Tour</a>
+      <a href="#packages" class="btn-outline">View Packages</a>
+    </div>
+  </div>
+  <div class="hero-dots" id="heroDots"></div>
+  <div class="scroll-cue"><span>Discover</span><div class="scl"></div></div>
+</section>
+
+<div id="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<div id="stats">
+  <div class="stats-inner">
+    <div class="stat-item reveal"><span class="stat-number" data-target="1.25">0</span><span class="stat-label">Acre Venue Space</span></div>
+    <div class="stat-div"></div>
+    <div class="stat-item reveal d1"><span class="stat-number" data-target="100">0</span><span class="stat-label">Guest Capacity +</span></div>
+    <div class="stat-div"></div>
+    <div class="stat-item reveal d2"><span class="stat-number" data-target="5">0</span><span class="stat-label">Distinct Spaces</span></div>
+    <div class="stat-div"></div>
+    <div class="stat-item reveal d3"><span class="stat-number">1</span><span class="stat-label">Family Owned</span></div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="photo-stack reveal-l">
+        <img class="ps-main" src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0752.jpeg" alt="Rose Valley Pavilion" loading="lazy">
+        <img class="ps-accent" src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0737.jpeg" alt="Rose Valley Gazebo" loading="lazy">
+        <div class="ps-badge"><span class="ps-badge-n">100%</span><span class="ps-badge-l">Family Owned</span></div>
+      </div>
+      <div class="about-text reveal-r">
+        <span class="section-tag">Our Story</span>
+        <h2 class="section-heading">More Than a Venue —<br><em>It's Family</em></h2>
+        <div class="gold-rule"></div>
+        <p>Rose Valley Outdoor Venue is a family-owned rustic event space nestled in Humble, Texas. Our 1.25-acre property is fully dedicated to your event and designed to make every celebration feel magical, intimate, and unforgettable.</p>
+        <p>From the moment you arrive, you'll feel the warmth and care that sets us apart. We go above and beyond for every client because at Rose Valley, you're not just a booking — you're family.</p>
+        <div class="amenity-grid">
+          <div class="amenity"><div class="amenity-dot"></div>Covered Pavilion</div>
+          <div class="amenity"><div class="amenity-dot"></div>String Light Ambiance</div>
+          <div class="amenity"><div class="amenity-dot"></div>Beautiful Gazebo</div>
+          <div class="amenity"><div class="amenity-dot"></div>Mobile Bar Trailer</div>
+          <div class="amenity"><div class="amenity-dot"></div>Private Restrooms</div>
+          <div class="amenity"><div class="amenity-dot"></div>Ample Parking</div>
+          <div class="amenity"><div class="amenity-dot"></div>Bring Your Own Catering</div>
+          <div class="amenity"><div class="amenity-dot"></div>Flexible Vendor Policy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="events-showcase">
+  <div class="container">
+    <div class="showcase-header reveal">
+      <span class="section-tag">Real Events</span>
+      <h2 class="section-heading">Celebrations Come <em>Alive</em> Here</h2>
+      <div class="gold-rule"></div>
+      <p style="font-size:.82rem;color:var(--text-light);max-width:500px;margin:0 auto;font-weight:300;line-height:1.9;">From intimate birthdays to grand gender reveals — Rose Valley is where Houston families create their most treasured memories.</p>
+    </div>
+    <div class="showcase-grid reveal">
+      <div class="sc-item big" onclick="openLightbox(this)">
+        <img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.16.02%20PM.jpeg" alt="Gender Reveal" loading="lazy">
+        <div class="sc-overlay"><span class="sc-label">Gender Reveal</span></div>
+      </div>
+      <div class="sc-item" onclick="openLightbox(this)">
+        <img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.14.11%20PM.jpeg" alt="Floral Event" loading="lazy">
+        <div class="sc-overlay"><span class="sc-label">Floral Celebration</span></div>
+      </div>
+      <div class="sc-item" onclick="openLightbox(this)">
+        <img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.13.40%20PM.jpeg" alt="Wedding" loading="lazy">
+        <div class="sc-overlay"><span class="sc-label">Wedding</span></div>
+      </div>
+      <div class="sc-item" onclick="openLightbox(this)">
+        <img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.16.27%20PM.jpeg" alt="Elegant Setup" loading="lazy">
+        <div class="sc-overlay"><span class="sc-label">Elegant Dinner</span></div>
+      </div>
+      <div class="sc-item" onclick="openLightbox(this)">
+        <img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.14.41%20PM.jpeg" alt="Quinceanera" loading="lazy">
+        <div class="sc-overlay"><span class="sc-label">Quinceañera</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="packages">
+  <div class="container">
+    <div class="pkg-header reveal">
+      <span class="section-tag">What We Offer</span>
+      <h2 class="section-heading">Our <em>Packages</em></h2>
+      <div class="gold-rule"></div>
+      <p style="font-size:.82rem;color:var(--text-light);max-width:550px;margin:0 auto;font-weight:300;line-height:1.9;">All packages are customizable. Clients are welcome to bring their own caterers, vendors, and beverages.</p>
+    </div>
+    <div class="pkg-card reveal">
+      <div class="tour-banner">⭐ All rentals require a scheduled in-person venue tour prior to booking. No dates will be reserved without a completed tour.</div>
+      <div class="pkg-name">Basic Package</div>
+      <div class="pkg-tagline">Everything You Need for an Unforgettable Celebration</div>
+      <div class="pricing-row">
+        <div class="price-cell"><span class="price-day">Friday</span><span class="price-amt">$1,200</span><span class="price-hrs">1:30 PM – 12:00 AM</span></div>
+        <div class="price-cell"><span class="price-day">Saturday</span><span class="price-amt">$1,450</span><span class="price-hrs">12:00 PM – 12:00 AM</span></div>
+        <div class="price-cell"><span class="price-day">Sunday</span><span class="price-amt">$1,100</span><span class="price-hrs">12:00 PM – 11:00 PM</span></div>
+        <div class="price-cell"><span class="price-day">Extra Hour</span><span class="price-amt">$175</span><span class="price-hrs">Per additional hour</span></div>
+      </div>
+      <span class="incl-label">What's Included</span>
+      <div class="incl-grid">
+        <div class="incl-item">Chairs & Tables for 100 Guests</div>
+        <div class="incl-item">Bluetooth Speaker</div>
+        <div class="incl-item">2 Candy Carts (No Desserts)</div>
+        <div class="incl-item">Up to 4 Marquee Letters/Numbers</div>
+        <div class="incl-item">Mobile Bar (No Bartender)</div>
+        <div class="incl-item">3 Large Ice Chests</div>
+        <div class="incl-item">Security</div>
+        <div class="incl-item">Additional Hours Available</div>
+      </div>
+      <div class="addons-wrap">
+        <span class="incl-label">Optional Add-Ons</span>
+        <div class="addons-grid">
+          <div class="addon-row"><span>Tablecloths (Rectangle)</span><span class="addon-price">$8</span></div>
+          <div class="addon-row"><span>Tablecloths (Round)</span><span class="addon-price">$10</span></div>
+          <div class="addon-row"><span>Runners</span><span class="addon-price">$2 each</span></div>
+          <div class="addon-row"><span>Shot Cart + Shot Cups</span><span class="addon-price">$75</span></div>
+          <div class="addon-row"><span>Extra Marquee Letters/Numbers</span><span class="addon-price">$30 each</span></div>
+          <div class="addon-row"><span>Toddler White Moonwalk</span><span class="addon-price">$100</span></div>
+        </div>
+      </div>
+      <div class="pay-box"><strong style="color:var(--gold-light);">Payment Policy:</strong> A $200 refundable deposit is required to reserve your date (returned the day after the event if the venue is left in good condition). Deposit is non-refundable if cancelled. Remaining balance due day of event. Payment method will be discussed upon scheduling your venue tour.</div>
+      <a href="#contact" class="btn-gold">Request a Tour & Inquire</a>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="container">
+    <div class="gal-header reveal">
+      <span class="section-tag">The Venue</span>
+      <h2 class="section-heading">Experience <em>Rose Valley</em></h2>
+      <div class="gold-rule"></div>
+    </div>
+
+    <!-- DESKTOP TABS + MASONRY -->
+    <div class="gal-tabs">
+      <button class="g-tab active" onclick="filterGal('all',this)">All</button>
+      <button class="g-tab" onclick="filterGal('pavilion',this)">Pavilion</button>
+      <button class="g-tab" onclick="filterGal('gazebo',this)">Gazebo</button>
+      <button class="g-tab" onclick="filterGal('events',this)">Events</button>
+      <button class="g-tab" onclick="filterGal('bar',this)">Bar & Extras</button>
+      <button class="g-tab" onclick="filterGal('restrooms',this)">Restrooms</button>
+    </div>
+    <div class="gal-masonry" id="galGrid">
+      <div class="g-item" data-cat="pavilion" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0734.jpeg" alt="Pavilion" loading="lazy"><div class="g-mask"><span class="g-label">Main Pavilion</span></div></div>
+      <div class="g-item" data-cat="gazebo" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0758.jpeg" alt="Gazebo Dusk" loading="lazy"><div class="g-mask"><span class="g-label">Gazebo at Dusk</span></div></div>
+      <div class="g-item" data-cat="pavilion" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0740.jpeg" alt="Boardwalk" loading="lazy"><div class="g-mask"><span class="g-label">Boardwalk View</span></div></div>
+      <div class="g-item" data-cat="gazebo" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0750.jpeg" alt="Gazebo" loading="lazy"><div class="g-mask"><span class="g-label">Gazebo</span></div></div>
+      <div class="g-item" data-cat="pavilion" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0729.jpeg" alt="Wide Shot" loading="lazy"><div class="g-mask"><span class="g-label">Wide View</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.13.40%20PM.jpeg" alt="MR MRS" loading="lazy"><div class="g-mask"><span class="g-label">Wedding</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.14.11%20PM.jpeg" alt="Floral" loading="lazy"><div class="g-mask"><span class="g-label">Floral Celebration</span></div></div>
+      <div class="g-item" data-cat="pavilion" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0764.jpeg" alt="Dusk" loading="lazy"><div class="g-mask"><span class="g-label">Dusk View</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.15.06%20PM.jpeg" alt="Circus Theme" loading="lazy"><div class="g-mask"><span class="g-label">Circus Theme</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.16.27%20PM.jpeg" alt="Elegant" loading="lazy"><div class="g-mask"><span class="g-label">Elegant Setup</span></div></div>
+      <div class="g-item" data-cat="pavilion" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0762.jpeg" alt="Night Boardwalk" loading="lazy"><div class="g-mask"><span class="g-label">Night Boardwalk</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.14.41%20PM.jpeg" alt="Quinceanera" loading="lazy"><div class="g-mask"><span class="g-label">Quinceañera</span></div></div>
+      <div class="g-item" data-cat="gazebo" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0737.jpeg" alt="Gazebo Close" loading="lazy"><div class="g-mask"><span class="g-label">Gazebo Closeup</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.20.12%20PM.jpeg" alt="Chair Covers" loading="lazy"><div class="g-mask"><span class="g-label">Chair Cover Setup</span></div></div>
+      <div class="g-item" data-cat="bar" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-04%20at%2010.34.18%20PM.jpeg" alt="Mobile Bar" loading="lazy"><div class="g-mask"><span class="g-label">Mobile Bar</span></div></div>
+      <div class="g-item" data-cat="pavilion" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0763.jpeg" alt="Boardwalk" loading="lazy"><div class="g-mask"><span class="g-label">Venue Walkway</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.19.46%20PM.jpeg" alt="Outdoor Event" loading="lazy"><div class="g-mask"><span class="g-label">Outdoor Event</span></div></div>
+      <div class="g-item" data-cat="pavilion" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0763.jpeg" alt="Dusk Pavilion" loading="lazy"><div class="g-mask"><span class="g-label">Dusk Pavilion</span></div></div>
+      <div class="g-item" data-cat="restrooms" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0741.jpeg" alt="Restroom" loading="lazy"><div class="g-mask"><span class="g-label">Restroom Entrance</span></div></div>
+      <div class="g-item" data-cat="restrooms" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/IMG_0742.jpeg" alt="Men's Restroom" loading="lazy"><div class="g-mask"><span class="g-label">Men's Restroom</span></div></div>
+      <div class="g-item" data-cat="bar" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-04%20at%2010.34.18%20PM.jpeg" alt="Entrance" loading="lazy"><div class="g-mask"><span class="g-label">Entrance & Carts</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.17.02%20PM.jpeg" alt="Cow Theme" loading="lazy"><div class="g-mask"><span class="g-label">Themed Event</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.21.12%20PM.jpeg" alt="Bar Event" loading="lazy"><div class="g-mask"><span class="g-label">Bar Setup</span></div></div>
+      <div class="g-item" data-cat="events" onclick="openLightbox(this)"><img src="https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/Screenshot%202026-04-05%20at%207.15.20%20PM.jpeg" alt="Balloons" loading="lazy"><div class="g-mask"><span class="g-label">Balloon Arch</span></div></div>
+    </div>
+
+    <!-- MOBILE CAROUSEL -->
+    <div class="gal-carousel" id="galCarousel">
+      <div class="carousel-track" id="carouselTrack"></div>
+      <div class="carousel-nav">
+        <button class="carousel-btn" onclick="prevSlide()">‹</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+        <button class="carousel-btn" onclick="nextSlide()">›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <img src="" alt="" id="lbImg">
+</div>
+
+<section id="availability">
+  <div class="container">
+    <div class="avail-grid">
+      <div class="reveal">
+        <span class="section-tag">Plan Your Event</span>
+        <h2 class="section-heading">Check <em>Availability</em></h2>
+        <div class="gold-rule"></div>
+        <p style="font-size:.82rem;color:var(--text-light);line-height:2;font-weight:300;margin-bottom:2rem;">View our current availability. To reserve a date, submit an inquiry and schedule your in-person tour first.</p>
+        <div class="legend">
+          <div class="legend-item"><div class="l-dot l-a"></div>Available</div>
+          <div class="legend-item"><div class="l-dot l-p"></div>Tour Scheduled / Pending</div>
+          <div class="legend-item"><div class="l-dot l-b"></div>Booked</div>
+        </div>
+        <div class="avail-note-box">📌 An in-person venue tour is required before any date can be reserved. Contact us to schedule yours today.</div>
+        <a href="#contact" class="btn-gold">Request a Tour</a>
+      </div>
+      <div class="reveal d2">
+        <div class="cal-wrap" style="padding:0;overflow:hidden;">
+          <iframe src="https://calendar.google.com/calendar/embed?src=5b2564567041c77c5e632ccf1a3679ce03dc54215e12cfb6f94db12d20c7923c%40group.calendar.google.com&ctz=America%2FChicago&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=MONTH&color=%23C9A84C" style="border:none;width:100%;height:500px;" frameborder="0" scrolling="no"></iframe>
+        </div>
+        <p style="font-size:.65rem;color:var(--text-muted);line-height:1.7;margin-top:1rem;font-weight:300;">* Calendar is updated in real time. Green dates are available, events shown are booked or pending. Contact us to reserve your date.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal-l">
+        <span class="section-tag">Get In Touch</span>
+        <h2 class="section-heading">Request a <em>Tour</em></h2>
+        <div class="gold-rule"></div>
+        <p>We'd love to show you around Rose Valley. Fill out the form and we'll reach out to schedule your personal venue tour.</p>
+        <div class="c-details">
+          <div class="cd-item"><span class="cd-label">Location</span><span class="cd-value">Rubilee Ave, Humble, Texas 77396</span></div>
+          <div class="cd-item"><span class="cd-label">Business Hours</span><span class="cd-value">By Appointment Only</span></div>
+          <div class="cd-item"><span class="cd-label">Events We Host</span><span class="cd-value">Weddings · Quinceañeras · Birthdays<br>Gender Reveals · Corporate Events · Celebrations</span></div>
+          <div class="cd-item"><span class="cd-label">Payment Methods</span><span class="cd-value">Payment method will be discussed upon scheduling your venue tour</span></div>
+        </div>
+        <div class="tour-req">All reservations require an in-person venue tour. No dates will be held without a completed visit.</div>
+      </div>
+      <div class="reveal-r">
+        <form class="form" id="inquiryForm" onsubmit="submitForm(event)">
+          <div class="form-row">
+            <div class="fg"><label>First Name *</label><input type="text" placeholder="Maria" required></div>
+            <div class="fg"><label>Last Name *</label><input type="text" placeholder="Garcia" required></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Phone Number *</label><input type="tel" placeholder="(281) 555-0100" required></div>
+            <div class="fg"><label>Email Address *</label><input type="email" placeholder="maria@email.com" required></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Event Type *</label>
+              <select required><option value="" disabled selected>Select event type</option><option>Wedding</option><option>Quinceañera</option><option>Birthday Party</option><option>Gender Reveal</option><option>Baby / Bridal Shower</option><option>Corporate Event</option><option>Anniversary</option><option>Other Celebration</option></select>
+            </div>
+            <div class="fg"><label>Preferred Date *</label><input type="date" required></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Estimated Guests *</label>
+              <select required><option value="" disabled selected>Number of guests</option><option>Under 50</option><option>50 – 75</option><option>75 – 100</option><option>100+</option></select>
+            </div>
+            <div class="fg"><label>Package Interest</label>
+              <select><option value="" disabled selected>Select a package</option><option>Basic Package</option><option>Not sure yet</option></select>
+            </div>
+          </div>
+          <div class="fg"><label>Tell Us About Your Event</label><textarea placeholder="Share your vision, theme, or special requests..."></textarea></div>
+          <p class="form-note">* By submitting, you agree to be contacted to schedule your in-person venue tour. No date is reserved until a tour is completed and deposit received.</p>
+          <button type="submit" class="btn-gold" style="border:none;cursor:pointer;width:fit-content;">Submit Inquiry</button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <h3>Thank You!</h3>
+          <p>Your inquiry has been received. We'll be in touch within 24–48 hours to schedule your personal tour at Rose Valley!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">Rose Valley Outdoor Venue</div>
+    <p class="footer-tagline">Where Every Celebration Becomes a Memory · Humble, Texas</p>
+    <div class="footer-links">
+      <a href="#about">About</a><a href="#events-showcase">Events</a>
+      <a href="#packages">Packages</a><a href="#gallery">Gallery</a>
+      <a href="#availability">Availability</a><a href="#contact">Contact</a>
+    </div>
+    <p class="footer-copy">© 2026 Edgar & Patty's Rental Properties LLC · Rose Valley Outdoor Venue · All Rights Reserved</p>
+  </div>
+</footer>
+
+<script>
+const R2='https://pub-c799d867860a4ac2922d08023ceb0492.r2.dev/';
+
+// LOADER
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('hidden'),2200));
+
+// NAV
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60));
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+
+// HERO SLIDESHOW
+let si=0;
+const slides=document.querySelectorAll('.hero-slide');
+const dc=document.getElementById('heroDots');
+slides.forEach((_,i)=>{
+  const d=document.createElement('button');
+  d.className='hdot'+(i===0?' active':'');
+  d.onclick=()=>goSlide(i);dc.appendChild(d);
+});
+function goSlide(n){
+  slides[si].classList.remove('active');
+  document.querySelectorAll('.hdot')[si].classList.remove('active');
+  si=n;slides[si].classList.add('active');
+  document.querySelectorAll('.hdot')[si].classList.add('active');
+}
+setInterval(()=>goSlide((si+1)%slides.length),5000);
+
+// TICKER
+const tImgs=['IMG_0728.jpeg','IMG_0758.jpeg','IMG_0762.jpeg','IMG_0764.jpeg','IMG_0752.jpeg','IMG_0737.jpeg','IMG_0750.jpeg','IMG_0740.jpeg','Screenshot%202026-04-05%20at%207.16.02%20PM.jpeg','Screenshot%202026-04-05%20at%207.13.40%20PM.jpeg','Screenshot%202026-04-05%20at%207.14.11%20PM.jpeg','Screenshot%202026-04-05%20at%207.16.27%20PM.jpeg','Screenshot%202026-04-04%20at%2010.34.18%20PM.jpeg','IMG_0729.jpeg'];
+const track=document.getElementById('tickerTrack');
+[...tImgs,...tImgs].forEach(f=>{const i=document.createElement('img');i.className='ticker-img';i.src=R2+f;i.alt='Rose Valley';i.loading='lazy';track.appendChild(i);});
+
+// SCROLL REVEAL
+const revEls=document.querySelectorAll('.reveal,.reveal-l,.reveal-r');
+const revObs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*50);});},{threshold:0.1});
+revEls.forEach(el=>revObs.observe(el));
+
+// COUNTER
+document.querySelectorAll('.stat-number[data-target]').forEach(el=>{
+  new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){
+      const target=parseFloat(el.dataset.target),isD=target%1!==0;
+      let start=0;
+      const step=ts=>{if(!start)start=ts;const p=Math.min((ts-start)/1800,1),v=p*target;
+        el.textContent=isD?v.toFixed(2):Math.floor(v);if(p<1)requestAnimationFrame(step);else el.textContent=isD?target:target+'+';}
+      requestAnimationFrame(step);
+    }
+  },{threshold:0.5}).observe(el);
+});
+
+// GALLERY FILTER
+function filterGal(cat,btn){
+  document.querySelectorAll('.g-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.g-item').forEach(item=>{item.style.display=(cat==='all'||item.dataset.cat===cat)?'block':'none';});
+}
+
+// LIGHTBOX
+function openLightbox(el){const img=el.querySelector('img');document.getElementById('lbImg').src=img.src;document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+
+// MOBILE CAROUSEL
+const carouselImgs=[
+  {src:'IMG_0728.jpeg',label:'Pavilion'},
+  {src:'IMG_0758.jpeg',label:'Gazebo at Dusk'},
+  {src:'IMG_0762.jpeg',label:'Night Boardwalk'},
+  {src:'IMG_0764.jpeg',label:'Dusk View'},
+  {src:'Screenshot%202026-04-05%20at%207.16.02%20PM.jpeg',label:'Gender Reveal'},
+  {src:'Screenshot%202026-04-05%20at%207.13.40%20PM.jpeg',label:'Wedding'},
+  {src:'Screenshot%202026-04-05%20at%207.14.11%20PM.jpeg',label:'Floral Event'},
+  {src:'Screenshot%202026-04-05%20at%207.16.27%20PM.jpeg',label:'Elegant Setup'},
+  {src:'Screenshot%202026-04-05%20at%207.14.41%20PM.jpeg',label:'Quinceañera'},
+  {src:'Screenshot%202026-04-05%20at%207.15.06%20PM.jpeg',label:'Circus Theme'},
+  {src:'IMG_0740.jpeg',label:'Boardwalk'},
+  {src:'IMG_0750.jpeg',label:'Gazebo'},
+  {src:'IMG_0737.jpeg',label:'Gazebo Closeup'},
+  {src:'IMG_0729.jpeg',label:'Wide View'},
+  {src:'Screenshot%202026-04-04%20at%2010.34.18%20PM.jpeg',label:'Mobile Bar'},
+  {src:'Screenshot%202026-04-04%20at%2010.34.18%20PM.jpeg',label:'Entrance'},
+  {src:'IMG_0741.jpeg',label:'Restroom Entrance'},
+  {src:'Screenshot%202026-04-05%20at%207.20.12%20PM.jpeg',label:'Chair Covers'},
+  {src:'Screenshot%202026-04-05%20at%207.19.46%20PM.jpeg',label:'Outdoor Event'},
+  {src:'Screenshot%202026-04-05%20at%207.21.12%20PM.jpeg',label:'Bar Setup'},
+];
+
+// Group into slides of 4 images each (collage layout)
+const slideSize=4;
+const slideGroups=[];
+for(let i=0;i<carouselImgs.length;i+=slideSize){slideGroups.push(carouselImgs.slice(i,i+slideSize));}
+
+const cTrack=document.getElementById('carouselTrack');
+const cDots=document.getElementById('carouselDots');
+let cIndex=0;
+
+slideGroups.forEach((group,si)=>{
+  const slide=document.createElement('div');
+  slide.className='carousel-slide';
+  const collage=document.createElement('div');
+  collage.className='carousel-collage';
+  group.forEach((img,idx)=>{
+    const item=document.createElement('div');
+    item.className='col-item'+(idx===0?' tall':'');
+    item.onclick=()=>{openLightboxSrc(R2+img.src);}
+    const i=document.createElement('img');
+    i.src=R2+img.src;i.alt=img.label;i.loading='lazy';
+    item.appendChild(i);collage.appendChild(item);
+  });
+  slide.appendChild(collage);cTrack.appendChild(slide);
+  const dot=document.createElement('button');
+  dot.className='c-dot'+(si===0?' active':'');
+  dot.onclick=()=>goCarousel(si);cDots.appendChild(dot);
+});
+
+function goCarousel(n){
+  cIndex=n;
+  cTrack.style.transform=`translateX(-${n*100}%)`;
+  document.querySelectorAll('.c-dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+}
+function prevSlide(){goCarousel((cIndex-1+slideGroups.length)%slideGroups.length);}
+function nextSlide(){goCarousel((cIndex+1)%slideGroups.length);}
+
+// Touch swipe for carousel
+let touchStartX=0;
+document.getElementById('galCarousel').addEventListener('touchstart',e=>touchStartX=e.touches[0].clientX,{passive:true});
+document.getElementById('galCarousel').addEventListener('touchend',e=>{
+  const diff=touchStartX-e.changedTouches[0].clientX;
+  if(Math.abs(diff)>50){diff>0?nextSlide():prevSlide();}
+},{passive:true});
+
+function openLightboxSrc(src){document.getElementById('lbImg').src=src;document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
+
+// FORM
+function submitForm(e){e.preventDefault();document.getElementById('inquiryForm').style.display='none';document.getElementById('formSuccess').style.display='block';}
+
+// HERO PARALLAX
+window.addEventListener('scroll',()=>{const s=window.scrollY;document.querySelectorAll('.hero-slide.active').forEach(slide=>{slide.style.transform=`translateY(${s*.3}px)`;});});
+
+</script>
+</body>
+</html>
